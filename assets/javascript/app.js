@@ -12,8 +12,18 @@ var intervalId;
 
 $("#start").click(startGame);
 
+function startGame() {
+	$("#timer").html("00:20");
+	showQuestion = setInterval(nextQuestion, 20000);
+	document.querySelector("#explanation").style.opacity = "0";
+	document.querySelector("#start").style.opacity = "0";
+  	intervalId = setInterval(counting, 1000);
+  	displayQuestion();
+};
+
 function displayQuestion() {
-	$("#question").html("<p>" + question[count] "</p>");
+	document.querySelector("#explanation").style.opacity = "0";
+	$("#question").html("<h3>" + question[count] + "</h3>");
 	$("#aOne").html("<p>" + answerOne[count] + "</p>");
 	$("#aTwo").html("<p>" + answerTwo[count] + "</p>");
 	$("#aThree").html("<p>" + answerThree[count] + "</p>");
@@ -23,28 +33,32 @@ function displayQuestion() {
 function nextQuestion() {
   count++;
   setTimeout(displayQuestion, 5000);
-};
+  document.querySelector("#explanation").style.opacity = "1";
+  $("#explanation").html("<p>Time is up.</p>");
 
-function startGame() {
-	$("#timer").html("00:20");
-	document.querySelector("#explanation").style.opacity = "0";
-	document.querySelector("#start").style.opacity = "0";
-  	showQuestion = setInterval(count, 20000);
-  	intervalId = setInterval(counting, 1000);
+	if (count === 5) {
+		clearInterval(count);
+		clearInterval(time);
+		$("#correct").html("<p>Game Over.</p><p>You got blank out of blank correct.");
+	}
 };
 
 function counting() {
 	time--;
 	var converted = timeConverter(time);
 	$("#timer").html(converted);
+
+	if (time === 0) {
+		$("#question").html("<h></h3>");
+		$("#aOne").html("<p></p>");
+		$("#aTwo").html("<p></p>");
+		$("#aThree").html("<p></p>");
+		$("#aFour").html("<p></p>");
+		startGame();
+	}
 }
 
-if (changeTimer = 00:00) {
-	clearInterval(count);
-	document.querySelector("correct").innerHTML = "You lose";
-}
-
-  timeConverter: function(t) {
+function timeConverter(t) {
     var minutes = Math.floor(t / 60);
     var seconds = t - (minutes * 60);
 
@@ -63,27 +77,25 @@ if (changeTimer = 00:00) {
     return minutes + ":" + seconds;
   }
 
-displayQuestion();
-
 var first = document.getElementById("aOne");
 var second = document.getElementById("aTwo");
 var third = document.getElementById("aThree");
 var fourth = document.getElementById("aFour");
 
 first.onclick = function(){
-    style.backgroundColor = "red";
+
 }
 
 second.onclick = function(){
-    style.backgroundColor = "red";
+
 }
 
 third.onclick = function(){
-    style.backgroundColor = "red";
+
 }
 
 fourth.onclick = function(){
-    style.backgroundColor = "red";
+
 }
 
 }
