@@ -14,9 +14,10 @@ var first = document.getElementById("aOne");
 var second = document.getElementById("aTwo");
 var third = document.getElementById("aThree");
 var fourth = document.getElementById("aFour");
-var win;
+var win = 0;
 
 $("#start").click(startGame);
+$("#reset").click(reset);
 
 function startGame() {
 	startTime();
@@ -28,8 +29,13 @@ function startGame() {
 
 function startTime() {
 	time = 20;
-	$("#timer").html("<p>00:20</p>");
   	intervalId = setInterval(counting, 1000);
+  	displayTime();
+}
+
+function displayTime() {
+	time = 20;
+	$("#timer").html("<p>00:20</p>");
 }
 
 function displayQuestion() {
@@ -47,36 +53,55 @@ function displayQuestion() {
 
 function nextQuestion() {
     count++;
-    setTimeout(startGame, 5000);
+    setTimeout(displayQuestion, 5000);
     document.querySelector("#explanation").style.opacity = "1";
     $("#explanation").html("<p>Time is up.</p>");
     first.style.background = "transparent";
     second.style.background = "transparent";
     third.style.background = "transparent";
     fourth.style.background = "transparent";
-    clearInterval(time);
-    time = 5;
-    $("#timer").html("<p>00:05</p>");
-    intervalId = setInterval(counting, 1000);
-
-    if (answer === true) {
-
-    	$("#explanation").html("<p>Time is up.</p><p>Correct Answer!</p>");
-	}
-
-	if (answer === false) {
-		$("#explanation").html("<p>Time is up.</p><p>Wrong Answer</p>");
-	}
-
-  		$("#question").html("<h3></h3>");
+    	$("#question").html("<h3></h3>");
 		$("#aOne").html("<p></p>");
 		$("#aTwo").html("<p></p>");
 		$("#aThree").html("<p></p>");
 		$("#aFour").html("<p></p>");
 
-	if (count > 4) {
-		clearInterval(count);
-		clearInterval(time);
+    setTimeout(displayTime, 5000);
+    time = 5;
+    $("#timer").html("<p>00:05</p>");
+
+
+    if (answer === true) {
+    	$("#explanation").html("<p>Time is up.</p><p>Correct Answer!</p>");
+	}
+
+	if (answer === false) {
+		if (count === 1) {
+			$("#explanation").html("<p>Time is up.</p><p>Wrong Answer. The correct answer is: " + answerTwo[count - 1] + "</p>");
+		}
+		if (count === 2) {
+			$("#explanation").html("<p>Time is up.</p><p>Wrong Answer. The correct answer is: " + answerFour[count - 1] + "</p>");
+		}
+		if (count === 3) {
+			$("#explanation").html("<p>Time is up.</p><p>Wrong Answer. The correct answer is: " + answerOne[count - 1] + "</p>");
+		}
+		if (count === 4) {
+			$("#explanation").html("<p>Time is up.</p><p>Wrong Answer. The correct answer is: " + answerThree[count - 1] + "</p>");
+		}
+	}
+
+	if (count === 4) {
+		clearInterval(showQuestion);
+		clearInterval(intervalId);
+		time = 0;
+		$("#timer").html("<p>00:00</p>")
+		$("#question").html("<h3></h3>");
+		$("#aOne").html("<p></p>");
+		$("#aTwo").html("<p></p>");
+		$("#aThree").html("<p></p>");
+		$("#aFour").html("<p></p>");
+		document.querySelector("#reset").style.opacity = "1";
+		document.querySelector("#reset").style.color = "#555555";
 		$("#correct").html("<p>Game Over.</p><p>You got " + win + " out of 4 correct.");
 	}
 };
@@ -163,6 +188,13 @@ fourth.onclick = function(){
 	} else {
 		answer = false;
 	}
+}
+
+function reset() {
+	time = 20;
+	count = 0;
+	win = 0;
+	startGame();
 }
 
 }
